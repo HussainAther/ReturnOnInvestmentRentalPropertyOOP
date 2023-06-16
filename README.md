@@ -1,11 +1,16 @@
 # W4 Friday Project - OOP Calculation of Rental Income (individual project)
 
-Here we assume that we have a client coming to us asking for an automated Rental Property Calculator. Our client's name is Brandon from a company called "Bigger Pockets". Below, you will find a video of what Brandon usually does to calculate his Rental Property ROI.
+Calculate the Return on Investment (ROI) for a rental property with API integration and feature engineering visualization given sample rental prices. Overall, we want to determine if you're making a good investment based on rental home Zillow Home Value Index (ZHVI).
 
-Using Visual Studio Code/Jupyter Notebook, and Object Oriented Programming create a program that will calculate the Return on Investment(ROI) for a rental property.
+Catch phrase: "Yare yare daze" 
 
-This project will be completed individually, though you can feel free to share ideas with your fellow students.
+File (Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv) source: https://www.zillow.com/research/data/
 
-Once completed, commit the project to github and submit the link to this assignment.
+## Usage: 
 
-also come up with a catch phrase for yourself 
+Run this with 
+```
+jupyter notebook --NotebookApp.iopub_data_rate_limit=1.0e10
+```
+
+to ensure we don't run into issues with data rate limit. 
