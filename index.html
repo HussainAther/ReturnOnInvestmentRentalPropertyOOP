@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rental Property Analyzer</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Rental Property Analyzer</h1>
+  
+  <div id="input-form">
+    <h2>Enter Property Details:</h2>
+    <form id="rental-property-form">
+      <p>
+      <label for="purchase-price">Purchase Price:</label>
+      <input type="number" id="purchase-price" required>
+    </p>
+    <p>
+      <label for="rental-income">Rental Income:</label>
+      <input type="number" id="rental-income" required>
+    </p>
+    <p>
+      <label for="laundry-income">Laundry Income:</label>
+      <input type="number" id="laundry-income" required>
+    </p>
+    <p>
+      <label for="storage-income">Storage Income:</label>
+      <input type="number" id="storage-income" required>
+    </p>
+    <p>
+      <label for="misc-income">Miscellaneous Income:</label>
+      <input type="number" id="misc-income" required>
+    </p>
+    <p>
+      <label for="taxes">Taxes:</label>
+      <input type="number" id="taxes" required>
+    </p>
+    <p>
+      <label for="insurance">Insurance:</label>
+      <input type="number" id="insurance" required>
+    </p>
+    <p>
+      <label for="water-sewer">Water/Sewer:</label>
+      <input type="number" id="water-sewer" required>
+    </p>
+    <p>
+      <label for="garbage">Garbage:</label>
+      <input type="number" id="garbage" required>
+    </p>
+    <p>
+      <label for="electric">Electric:</label>
+      <input type="number" id="electric" required>
+    </p>
+    <p>
+      <label for="gas">Gas:</label>
+      <input type="number" id="gas" required>
+    </p>
+    <p>
+      <label for="hoa-fees">HOA Fees:</label>
+      <input type="number" id="hoa-fees" required>
+    </p>
+    <p>
+      <label for="lawn-snow">Lawn/Snow:</label>
+      <input type="number" id="lawn-snow" required>
+    </p>
+    <p>
+      <label for="vacancy">Vacancy:</label>
+      <input type="number" id="vacancy" required>
+    </p>
+    <p>
+      <label for="repairs">Repairs:</label>
+      <input type="number" id="repairs" required>
+    </p>
+    <p>
+      <label for="capex">CapEx:</label>
+      <input type="number" id="capex" required>
+    </p>
+    <p>
+      <label for="prop-management">Property Management:</label>
+      <input type="number" id="prop-management" required>
+    </p>
+    <p>
+      <label for="mortgage">Mortgage:</label>
+      <input type="number" id="mortgage" required>
+    </p>
+    <p>
+      <label for="down-payment">Down Payment:</label>
+      <input type="number" id="down-payment" required>
+    </p>
+    <p>
+      <label for="closing-costs">Closing Costs:</label>
+      <input type="number" id="closing-costs" required>
+    </p>
+    <p>
+      <label for="rehab-budget">Rehab Budget:</label>
+      <input type="number" id="rehab-budget" required>
+    </p>
+    <p>
+      <label for="misc-other">Miscellaneous Other:</label>
+      <input type="number" id="misc-other" required>
+    </p>
+    <p>
+      <label for="sale-price">Sale price:</label>
+      <input type="number" id="salePrice" required>
+    </p>
+    <p>
+      <label for="zhvi">ZHVI (Optional):</label>
+      <input type="number" id="zhvi">
+    </p>
+    <p>
+      <button id="analyze-button" type="submit" onclick="analyzeProperty(event)">Analyze</button>
+    </p> 
+    </form>
+  </div>
+  
+  
+  <div id="api-visualization-container">
+    <canvas id="api-visualization-canvas" width="400" height="300"></canvas>
+  </div>
+
+
+  <div id="results" style="display: none;">
+    <h2>Financial Metrics:</h2>
+    <div id="financial-metrics">
+      <p>Total Monthly Income: $<span id="total-monthly-income"></span></p>
+      <p>Total Monthly Expenses: $<span id="total-monthly-expenses"></span></p>
+      <p>Annual Cash Flow: $<span id="annual-cash-flow"></span></p>
+      <p>Cash on Cash Return: <span id="cash-on-cash-return"></span>%</p>
+    </div>
+    
+    <h2>API Data Visualization:</h2>
+    <div id="api-visualization-results"></div>
+  </div>
+  
+  <script src="script.js">
+    document.getElementById("analyze-button").addEventListener("click", analyzeProperty);
+  </script>
+
+<div id="metrics-container"></div>
+
+</body>
+</html>
