@@ -113,30 +113,27 @@
     </form>
   </div>
   
-  
+  <h2>API Data Visualization:</h2>
   <div id="api-visualization-container">
     <canvas id="api-visualization-canvas" width="400" height="300"></canvas>
   </div>
 
-
-  <div id="results" style="display: none;">
+  <div id="results">
     <h2>Financial Metrics:</h2>
     <div id="financial-metrics">
-      <p>Total Monthly Income: $<span id="total-monthly-income"></span></p>
-      <p>Total Monthly Expenses: $<span id="total-monthly-expenses"></span></p>
-      <p>Annual Cash Flow: $<span id="annual-cash-flow"></span></p>
-      <p>Cash on Cash Return: <span id="cash-on-cash-return"></span>%</p>
+      <div id="metrics-container"></div>
     </div>
-    
-    <h2>API Data Visualization:</h2>
-    <div id="api-visualization-results"></div>
   </div>
   
+  <h2>ZHVI Data Visualization</h2>
+  <div id="zhvi-container">
+  <canvas id="zhvi-chart" width="400" height="300"></canvas>
+  </div>
   <script src="script.js">
     document.getElementById("analyze-button").addEventListener("click", analyzeProperty);
   </script>
 
-<div id="metrics-container"></div>
+
 
 </body>
 </html>

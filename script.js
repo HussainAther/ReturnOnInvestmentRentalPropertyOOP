@@ -33,6 +33,56 @@ function visualizeApiData(data) {
     }
   });
 
+    // Fetch the ZHVI data from the CSV file (you can use a library like PapaParse for parsing CSV)
+    fetch("Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv")
+    .then(response => response.text())
+    .then(csvData => {
+      // Parse the CSV data into an array of objects using a library like PapaParse
+      const parsedData = Papa.parse(csvData, { header: true }).data;
+      
+      // Extract the necessary data for the chart (e.g., dates and ZHVI values)
+      const dates = parsedData.map(row => row.Date);
+      const zhviValues = parsedData.map(row => parseFloat(row.Zhvi));
+
+      // Create a line chart using Chart.js
+      const chartContainer = document.getElementById("zhvi-container").getContext("2d");
+      const chartCanvas = document.getElementById('zhvi-chart');
+      const lineChart = new Chart(chartCanvas, {
+        type: "line",
+        data: {
+          labels: dates,
+          datasets: [
+            {
+              label: "ZHVI",
+              data: zhviValues,
+              backgroundColor: "rgba(75, 192, 192, 0.6)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "Date"
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: "ZHVI"
+              }
+            }
+          }
+        }
+      });
+    })
+    .catch(error => console.error("Error fetching or parsing CSV data:", error));
+
 }
 
 document.addEventListener("DOMContentLoaded", function() {
