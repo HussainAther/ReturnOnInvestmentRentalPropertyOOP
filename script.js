@@ -1,4 +1,6 @@
-function visualizeApiData(data, zhviinputdate) {
+// import { readCSV } from 'pandas-js';
+
+function visualizeData(data, zhviinputdate) {
   const VisualizationContainer = document.getElementById('visualization-container');
   const Visualization = document.getElementById('visualization-canvas');
 
@@ -88,6 +90,7 @@ function visualizeApiData(data, zhviinputdate) {
       // Chart.render([chart, zhviChart]);
     })
     .catch(error => console.error("Error fetching or parsing CSV data:", error));
+    // linearRegression();
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -308,6 +311,62 @@ class RentalProperty {
   }
 }
 
+
+async function linearRegression() {
+  // Read the CSV file into a DataFrame
+  const df = await readCSV("lib/Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv");
+
+  // Perform feature engineering and create new features
+  const dateColumns = df.columns.slice(5);
+
+  function convertToDateTime(dateStr) {
+    return new Date(dateStr);
+  }
+
+  df[dateColumns] = df[dateColumns].apply(convertToDateTime);
+
+  df['Year'] = df[dateColumns[0]].map(date => date.getFullYear());
+  df['Month'] = df[dateColumns[0]].map(date => date.getMonth() + 1);
+  df['Day'] = df[dateColumns[0]].map(date => date.getDate());
+
+  // Reshape the date columns into a single column
+  const dfValues = df[dateColumns].values.flat();
+
+  // Assign the reshaped values to the "Value" column
+  df['Value'] = dfValues.slice(0, df.length);
+
+  // Define the feature columns and target column
+  const featureColumns = ['Year', 'Month', 'Day'];
+  const targetColumn = 'Value';
+
+  // Remove rows with missing values
+  df.dropna(subset=[...featureColumns, targetColumn]);
+
+  // Split the data into training and testing sets
+  const X = df[featureColumns];
+  const y = df[targetColumn];
+  const [XTrain, XTest, yTrain, yTest] = sklearn.model_selection.train_test_split(X, y, { test_size: 0.2, random_state: 42 });
+
+  // Perform any additional preprocessing steps
+  // Example: Scale the feature values using StandardScaler
+  const scaler = new sklearn.preprocessing.StandardScaler();
+  const XTrainScaled = scaler.fit_transform(XTrain);
+  const XTestScaled = scaler.transform(XTest);
+
+  // Create a Linear Regression model
+  const model = new sklearn.linear_model.LinearRegression();
+  model.fit(XTrainScaled, yTrain);
+
+  // Make predictions on the test set
+  const yPred = model.predict(XTestScaled);
+
+  // Calculate the R-squared score
+  const r2 = sklearn.metrics.r2_score(yTest, yPred);
+  console.log("R-squared score:", r2);
+}
+
+
+
 function analyzeProperty(event) { 
   event.preventDefault();
 
@@ -335,7 +394,7 @@ var inputdata = {
 // Get the zhvi date 
 var zhvidate = property.zhvidate;
 
-  visualizeApiData(inputdata, zhvidate);
+  visualizeData(inputdata, zhvidate);
 } 
 
 // Add event listener to the form submit button
