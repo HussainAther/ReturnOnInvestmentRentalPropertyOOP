@@ -1,4 +1,4 @@
-function visualizeApiData(data) {
+function visualizeApiData(data, zhviinputdate) {
   const VisualizationContainer = document.getElementById('visualization-container');
   const Visualization = document.getElementById('visualization-canvas');
 
@@ -41,20 +41,22 @@ function visualizeApiData(data) {
       // Parse the CSV data into an array of objects using a library like PapaParse
       const parsedData = Papa.parse(csvData, { header: true }).data;
 
-      // Extract the necessary data for the chart (e.g., dates and ZHVI values)
-      const dates = parsedData.map(row => row.Date);
-      const zhviValues = parsedData.map(row => parseFloat(row.Zhvi));
+      // Extract the necessary data for the chart (e.g., region names and ZHVI values)
+      const regionnames = parsedData.map(row => row.RegionName);
+      const zhviValues = parsedData.map(row => row[zhviinputdate]);
 
+      // const zhviValues = parsedData.map(row => parseFloat(row[zhviinputdate.toString()]));
+      
       // Create a line chart using Chart.js
-      const zhvichartContainer = document.getElementById("zhvi-container").getContext("2d");
-      const zhviChartCanvas = document.getElementById('zhvi-chart').getContext("2d");
+      const zhvichartContainer = document.getElementById("zhvi-container");
+      const zhviChartCanvas = document.getElementById('zhvi-chart');
       const zhviChart = new Chart(zhviChartCanvas, {
         type: "line",
         data: {
-          labels: dates,
+          labels: regionnames,
           datasets: [
             {
-              label: "ZHVI",
+              label: "Home Value Index",
               data: zhviValues,
               backgroundColor: "rgba(75, 192, 192, 0.6)",
               borderColor: "rgba(75, 192, 192, 1)",
@@ -69,21 +71,21 @@ function visualizeApiData(data) {
             x: {
               title: {
                 display: true,
-                text: "Date"
+                text: "Region"
               }
             },
             y: {
               title: {
                 display: true,
-                text: "ZHVI"
+                text: "Home Value Index"
               }
             }
           }
         }
       });
 
-      // Render both charts simultaneously
-      Chart.render([chart, zhviChart]);
+      // // Render both charts simultaneously
+      // Chart.render([chart, zhviChart]);
     })
     .catch(error => console.error("Error fetching or parsing CSV data:", error));
 }
@@ -119,7 +121,8 @@ class RentalProperty {
     rehab_budget,
     misc_other,
     ZHVI,
-    salePrice
+    salePrice,
+    zhvidate
   ) {
     // Initialize the rental property object with the given parameters
     this.purchase_price = purchase_price;
@@ -153,6 +156,7 @@ class RentalProperty {
     this.vac_all = ZHVI * 0.10 || 0;
     this.cl_cost = this.purchase_price * 0.035;
     this.salePrice = salePrice;
+    this.zhvidate = zhvidate; 
   }
 
   // Other methods of the RentalProperty class...
@@ -183,7 +187,8 @@ class RentalProperty {
     var miscOther = parseFloat(document.getElementById("misc-other").value);
     var zhvi = parseFloat(document.getElementById("zhvi").value) || null;
     var salePrice = parseFloat(document.getElementById("salePrice").value);
-
+    var zhvidate = document.getElementById("zhvidate").value;
+    
     // Create a new RentalProperty object
     var property = new RentalProperty(
       purchasePrice,
@@ -210,6 +215,7 @@ class RentalProperty {
       miscOther,
       zhvi,
       salePrice,
+      zhvidate
     );
 
     // Return the created RentalProperty object
@@ -324,10 +330,12 @@ var inputdata = {
   TotalMonthlyExpenses: totalMonthlyExpenses,
   AnnualCashFlow: annualCashFlow,
   CashOnCashReturn: cashOnCashReturn,
-  ROI: roi
+  ROI: roi,
 };
+// Get the zhvi date 
+var zhvidate = property.zhvidate;
 
-  visualizeApiData(inputdata);
+  visualizeApiData(inputdata, zhvidate);
 } 
 
 // Add event listener to the form submit button
