@@ -4,6 +4,9 @@
   <title>Rental Property Analyzer</title>
   <link rel="stylesheet" type="text/css" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.5.1/papaparse.min.js"></script> -->
+<script src="papaparse.min.js"></script>
 </head>
 <body>
   <h1>Rental Property Analyzer</h1>
@@ -113,9 +116,9 @@
     </form>
   </div>
   
-  <h2>API Data Visualization:</h2>
-  <div id="api-visualization-container">
-    <canvas id="api-visualization-canvas" width="400" height="300"></canvas>
+  <h2>Data Visualization</h2>
+  <div id="visualization-container">
+    <canvas id="visualization-canvas" width="400" height="300"></canvas>
   </div>
 
   <div id="results">
@@ -125,7 +128,7 @@
     </div>
   </div>
   
-  <h2>ZHVI Data Visualization</h2>
+  <h2>Metro Home Value Index</h2>
   <div id="zhvi-container">
   <canvas id="zhvi-chart" width="400" height="300"></canvas>
   </div>
