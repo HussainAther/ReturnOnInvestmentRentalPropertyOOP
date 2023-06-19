@@ -35,6 +35,21 @@ npm install http-server
 npx http-server
 ```
 
+
+#### TODO
+* Still trying to get the Ridge Regression running using pandas-js. Until then, this part isn't necessary. 
+You also need pandas.js for performing the Ridge Regression analysis. Install using
+
+```
+npm install pandas-js
+```
+
+or 
+
+```
+npm install git+https://github.com/StratoDem/pandas.js
+```
+
 **Access the website**: Open your web browser and visit the URL provided by the server (typically `http://localhost:8080`). You should see your HTML page being served.
 
 
