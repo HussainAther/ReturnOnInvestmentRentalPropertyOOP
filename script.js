@@ -1,8 +1,9 @@
 function visualizeApiData(data) {
-  const apiVisualizationContainer = document.getElementById('api-visualization-container');
-  const apiVisualization = document.getElementById('api-visualization-canvas');
+  const VisualizationContainer = document.getElementById('visualization-container');
+  const Visualization = document.getElementById('visualization-canvas');
+
   // Example: Create a bar chart using Chart.js library
-  const chart = new Chart(apiVisualization, {
+  const chart = new Chart(Visualization, {
     type: 'bar',
     data: {
       labels: Object.keys(data),
@@ -33,21 +34,21 @@ function visualizeApiData(data) {
     }
   });
 
-    // Fetch the ZHVI data from the CSV file (you can use a library like PapaParse for parsing CSV)
-    fetch("Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv")
+  // Fetch the ZHVI data from the CSV file (you can use a library like PapaParse for parsing CSV)
+  fetch("lib/Metro_zhvi_uc_sfrcondo_tier_0.33_0.67_sm_sa_month.csv")
     .then(response => response.text())
     .then(csvData => {
       // Parse the CSV data into an array of objects using a library like PapaParse
       const parsedData = Papa.parse(csvData, { header: true }).data;
-      
+
       // Extract the necessary data for the chart (e.g., dates and ZHVI values)
       const dates = parsedData.map(row => row.Date);
       const zhviValues = parsedData.map(row => parseFloat(row.Zhvi));
 
       // Create a line chart using Chart.js
-      const chartContainer = document.getElementById("zhvi-container").getContext("2d");
-      const chartCanvas = document.getElementById('zhvi-chart');
-      const lineChart = new Chart(chartCanvas, {
+      const zhvichartContainer = document.getElementById("zhvi-container").getContext("2d");
+      const zhviChartCanvas = document.getElementById('zhvi-chart').getContext("2d");
+      const zhviChart = new Chart(zhviChartCanvas, {
         type: "line",
         data: {
           labels: dates,
@@ -80,9 +81,11 @@ function visualizeApiData(data) {
           }
         }
       });
+
+      // Render both charts simultaneously
+      Chart.render([chart, zhviChart]);
     })
     .catch(error => console.error("Error fetching or parsing CSV data:", error));
-
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -115,7 +118,8 @@ class RentalProperty {
     closing_costs,
     rehab_budget,
     misc_other,
-    ZHVI = null
+    ZHVI,
+    salePrice
   ) {
     // Initialize the rental property object with the given parameters
     this.purchase_price = purchase_price;
@@ -148,6 +152,7 @@ class RentalProperty {
     this.ins = (this.purchase_price / 10000) * 40;
     this.vac_all = ZHVI * 0.10 || 0;
     this.cl_cost = this.purchase_price * 0.035;
+    this.salePrice = salePrice;
   }
 
   // Other methods of the RentalProperty class...
@@ -177,6 +182,7 @@ class RentalProperty {
     var rehabBudget = parseFloat(document.getElementById("rehab-budget").value);
     var miscOther = parseFloat(document.getElementById("misc-other").value);
     var zhvi = parseFloat(document.getElementById("zhvi").value) || null;
+    var salePrice = parseFloat(document.getElementById("salePrice").value);
 
     // Create a new RentalProperty object
     var property = new RentalProperty(
@@ -202,7 +208,8 @@ class RentalProperty {
       closingCosts,
       rehabBudget,
       miscOther,
-      zhvi
+      zhvi,
+      salePrice,
     );
 
     // Return the created RentalProperty object
@@ -252,18 +259,18 @@ class RentalProperty {
     return (annualCashFlow / totalInvestmentCost) * 100;
   }
 
-  calculateROI(salePrice) {
-    const roi = (salePrice - (this.purchase_price + this.repairs + this.cl_cost)) / (this.purchase_price + this.repairs + this.cl_cost);
+  calculateROI() {
+    const roi = (this.salePrice - (this.purchase_price + this.repairs + this.cl_cost)) / (this.purchase_price + this.repairs + this.cl_cost);
     return roi;
   }
 
-  calculateCashOnCashReturn() {
+  calculateCashOnCashReturnCOC() {
     const mortPmt = this.loan * ((this.interest_rate / 12) * (1 + this.interest_rate / 12) ** this.mort_term) / ((1 + this.interest_rate / 12) ** this.mort_term - 1);
     const cashFlow = (12 * this.rental_income - (mortPmt + this.ins + this.vac_all)) / (this.down_pmt + this.cl_cost);
     return cashFlow;
   }
 
-  displayMetrics(totalMonthlyIncome, totalMonthlyExpenses, annualCashFlow, cashOnCashReturn) {
+  displayMetrics(totalMonthlyIncome, totalMonthlyExpenses, annualCashFlow, cashOnCashReturn, roiValue) {
     // Get the element where you want to display the metrics
     var metricsContainer = document.getElementById("metrics-container");
   
@@ -283,11 +290,15 @@ class RentalProperty {
     var cashOnCashReturnElement = document.createElement("p");
     cashOnCashReturnElement.textContent = "Cash-on-Cash Return: " + cashOnCashReturn.toFixed(2) + "%";
   
+    var roiElement = document.createElement("p");
+    roiElement.textContent = "Return on Investment: " + roiValue.toFixed(2);
+
     // Append the metric elements to the container
     metricsContainer.appendChild(totalMonthlyIncomeElement);
     metricsContainer.appendChild(totalMonthlyExpensesElement);
     metricsContainer.appendChild(annualCashFlowElement);
     metricsContainer.appendChild(cashOnCashReturnElement);
+    metricsContainer.appendChild(roiElement);
   }
 }
 
@@ -302,14 +313,13 @@ function analyzeProperty(event) {
   var totalMonthlyExpenses = property.calculateTotalMonthlyExpenses();
   var annualCashFlow = property.calculateAnnualCashFlow();
   var cashOnCashReturn = property.calculateCashOnCashReturn();
+  var roi = property.calculateROI(); 
 
   // Display the results
-  property.displayMetrics(totalMonthlyIncome, totalMonthlyExpenses, annualCashFlow, cashOnCashReturn);
+  property.displayMetrics(totalMonthlyIncome, totalMonthlyExpenses, annualCashFlow, cashOnCashReturn, roi);
 
-  var roi = property.calculateROI(document.getElementById("prop-management").value); // Replace 'salePrice' with the actual sale price value
-
-// Create the apiData object
-var apiData = {
+// Create the input data object
+var inputdata = {
   TotalMonthlyIncome: totalMonthlyIncome,
   TotalMonthlyExpenses: totalMonthlyExpenses,
   AnnualCashFlow: annualCashFlow,
@@ -317,7 +327,7 @@ var apiData = {
   ROI: roi
 };
 
-  visualizeApiData(apiData);
+  visualizeApiData(inputdata);
 } 
 
 // Add event listener to the form submit button
