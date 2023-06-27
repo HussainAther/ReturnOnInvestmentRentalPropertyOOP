@@ -17,7 +17,7 @@ to ensure we don't run into issues with data rate limit.
 
 To run the web interface, we use Node.js to access the files properly:
 
-*Initialize a new Node.js project**: Run the following command to initialize a new Node.js project in the current directory:
+**Initialize a new Node.js project**: Run the following command to initialize a new Node.js project in the current directory:
 
 ```
 npm init -y
@@ -65,7 +65,7 @@ The style.css file contains the Cascading Style Sheets (CSS) rules that define t
 `script.js`
 The script.js file contains the JavaScript code that provides interactivity and functionality to the web page. It includes event listeners, functions, and calculations related to the rental property ROI and cash-on-cash return. The JavaScript code interacts with the HTML elements, retrieves user input, performs calculations, and displays the results dynamically on the web page.
 
-To use the web interface, open the index.html file in a web browser. Enter the required input values, such as purchase price, rental income, expenses, and Zillow Home Value Index (ZHVI), in the provided form fields. Upon submission, the JavaScript code will calculate and display the return on investment metrics, such as total monthly income, total monthly expenses, annual cash flow, and cash-on-cash return, in the designated result areas on the web page.
+To use the web interface, open the `index.html` file in a web browser. Enter the required input values, such as purchase price, rental income, expenses, and Zillow Home Value Index (ZHVI), in the provided form fields. Upon submission, the JavaScript code will calculate and display the return on investment metrics, such as total monthly income, total monthly expenses, annual cash flow, and cash-on-cash return, in the designated result areas on the web page.
 
 Feel free to explore and interact with the web interface to analyze different rental property scenarios and evaluate their financial viability.
 
